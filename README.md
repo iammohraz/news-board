@@ -1,4 +1,4 @@
-![FOSS4News_screenshot](doc/img/screenshot.png)
+![NewsBoard_screenshot](doc/img/screenshot.png)
 
 # News-Board
 A Hacker News clone with Django &amp; Bootstrap in Persian
