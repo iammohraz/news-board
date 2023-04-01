@@ -1,0 +1,14 @@
+{% extends '../partials/base-layout.html' %}
+{% block title %}ساخت خبر - {{ sitename }}{% endblock %}
+{% block body %}
+    {% load crispy_forms_tags %}
+    <div class="pt-3">
+        <h4>ساخت خبر</h4>
+        <hr>
+        <form action="{% url 'news:link-create' %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">ساخت</button>
+        </form>
+    </div>
+{% endblock %}

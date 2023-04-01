@@ -1,0 +1,161 @@
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" type="image/png" href="{% static '/favicon.png' %}">
+    <link
+            rel="stylesheet"
+            href="{% static '/bootstrap/css/bootstrap.rtl.min.css' %}"
+    />
+    <style>
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-Thin.woff2' %}") format("woff2");
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-ExtraLight.woff2' %}") format("woff2");
+            font-weight: 200;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-Light.woff2' %}") format("woff2");
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-Regular.woff2' %}") format("woff2");
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-Medium.woff2' %}") format("woff2");
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-SemiBold.woff2' %}") format("woff2");
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-Bold.woff2' %}") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-ExtraBold.woff2' %}") format("woff2");
+            font-weight: 800;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: Vazirmatn;
+            src: url("{% static '/font/Vazirmatn-Black.woff2' %}") format("woff2");
+            font-weight: 900;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        body {
+            font-family: "Vazirmatn";
+        }
+
+        .v600 {
+            font-weight: 600;
+        }
+
+        .v700 {
+            font-weight: 700;
+        }
+    </style>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body class="container bg-light">
+{% with request.resolver_match.url_name as url_name %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded-bottom">
+        <div class="container">
+            <a class="navbar-brand v700" href="{% url 'news:home' %}"
+            >{{ sitename }}</a
+            >
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a
+                                class="nav-link v600 {% if url_name in 'news:home' %}active{% endif %}"
+                                aria-current="page"
+                                href="{% url 'news:home' %}"
+                        >صفحه اصلی</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link v600 {% if url_name in 'news:link-create' %}active{% endif %}"
+                           href="{% url 'news:link-create' %}">ساخت خبر</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link v600 {% if url_name in 'account:account' %}active{% endif %}"
+                               href="{% url 'account:account' %}">حساب کاربری</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link v600 {% if url_name in 'account:login' %}active{% endif %}"
+                               href="{% url 'account:login' %}">ورود</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link v600 {% if url_name in 'account:register' %}active{% endif %}"
+                               href="{% url 'account:register' %}">ثبت نام</a>
+                        </li>
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endwith %}
+<div class="container">{% block body %}{% endblock %}</div>
+<script src="{% static '/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

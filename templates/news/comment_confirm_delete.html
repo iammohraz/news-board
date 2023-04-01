@@ -1,0 +1,14 @@
+{% extends '../partials/base-layout.html' %}
+{% block title %}حذف نظر - {{ sitename }}{% endblock %}
+{% block body %}
+    {% load crispy_forms_tags %}
+    <div class="pt-3">
+        <div class="me-auto ms-auto bg-white border rounded-2 p-3" style="max-width: 450px">
+            <form action="{% url 'news:comment-delete' link.id comment.id %}" method="post" class="mb-0 text-center">
+                {% csrf_token %}
+                <p> آیا از حذف "{{ object }}" اطمینان دارید ؟</p>
+                <button type="submit" class="btn btn-danger">حذف</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends '../partials/base-layout.html' %}
+{% block title %}{{ link.title }} - {{ sitename }}{% endblock %}
+{% block body %}
+    {% load crispy_forms_tags %}
+    <div class="pt-3">
+        <div class="d-flex justify-content-between">
+            <div>
+                <a href="{{ link.url }}" class="text-decoration-none">
+                    <h3>{{ link.title }}</h3>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'news:link-like' link.id %}" id="like-{{ link.id }}" data-pk="{{ link.id }}"
+                   class="badge bg-success text-decoration-none like-dislike"
+                ><span id="like-count-{{ link.id }}">{{ link.like.count }}</span>
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            fill="currentColor"
+                            class="bi bi-caret-up-fill ms-1"
+                            viewBox="0 0 16 16"
+                    >
+                        <path
+                                d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"
+                        />
+                    </svg
+                    >
+                </a>
+                <a href="{% url 'news:link-dislike' link.id %}" id="dislike-{{ link.id }}" data-pk="{{ link.id }}"
+                   class="badge bg-danger text-decoration-none like-dislike"
+                ><span id="dislike-count-{{ link.id }}">{{ link.dislike.count }}</span>
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            fill="currentColor"
+                            class="bi bi-caret-down-fill ms-1"
+                            viewBox="0 0 16 16"
+                    >
+                        <path
+                                d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                        />
+                    </svg
+                    >
+                </a>
+            </div>
+        </div>
+        <div class="alert alert-danger rounded-2 p-2" style="display: none" id="login-alert-{{ link.id }}">ابتدا <a
+                href="{% url 'account:login' %}">وارد</a> شوید
+        </div>
+        <hr class="m-0 mt-2">
+        نوشته شده توسط {{ link.user.first_name }} {{ link.user.last_name }} در {{ link.created }}
+        <hr class="m-0 mb-3">
+        <p class="lead">{{ link.description }}</p>
+
+        <div class="mt-4 mb-4 ms-md-4 ms-1 me-md-4 me-1 p-3 bg-light shadow-sm border rounded-2">
+            <h5>ثبت نظر</h5>
+            <hr>
+            {% if user.is_authenticated %}
+                <form action="{% url 'news:comment-create' link.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">ثبت نظر</button>
+                </form>
+            {% else %}
+                <p>برای ثبت نظر ابتدا <a href="{% url 'account:login' %}">وارد</a> شوید</p>
+            {% endif %}
+
+        </div>
+        <div>
+            <h3 class="text-center">نظرات</h3>
+            <hr>
+            {% for comment in link.comments.all %}
+                <div class="border p-3 mb-3 bg-white rounded-2">
+                    <div class="bg-dark d-flex justify-content-between pe-3">
+                        <div>
+                            <p class="text-white mb-0">{{ comment.user.first_name }} {{ comment.user.last_name }}
+                                - {{ comment.created }}</p>
+                        </div>
+                        <div>
+                            <a href="{% url 'news:comment-delete' link.id comment.id %}" class="badge bg-danger">حذف</a>
+                        </div>
+                    </div>
+                    <p>{{ comment.text }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(".like-dislike").click(function (e) {
+            e.preventDefault()
+            id = $(this).attr("data-pk")
+            link = "/news/" + id + "/about/"
+            url = $(this).attr("href")
+            $.ajax({
+                url: url,
+                success: function (success) {
+                    $.ajax({
+                        url: link,
+                        success: function (s) {
+                            if (s.status) {
+                                $('#like-count-' + id).html(s.like)
+                                $('#dislike-count-' + id).html(s.dislike)
+                            } else {
+                                $('#login-alert-' + id).css({'display': 'block'})
+                            }
+                        },
+                        error: function (error) {
+                            console.log("error 1")
+                        }
+                    })
+                },
+                error: function (error) {
+                    console.log("error 1")
+                }
+            })
+        })
+    </script>
+{% endblock %}

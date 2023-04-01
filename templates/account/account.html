@@ -1,0 +1,34 @@
+{% extends '../partials/base-layout.html' %}
+{% block title %}حساب کاربری - {{ sitename }}{% endblock %}
+{% block body %}
+    <div class="pt-3">
+        <div class="card p-4 ms-auto me-auto" style="max-width: 800px">
+            <div class="d-inline-flex justify-content-between">
+                <div>
+                    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                </div>
+                <div>
+                    <a href="{% url 'account:logout' %}" class="btn btn-danger">خروج</a>
+                </div>
+            </div>
+            <hr/>
+            <p>نام کاربری: {{ user.username }}</p>
+            <p>ایمیل: {{ user.email }}</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'news:link-create' %}" class="btn btn-success w-100">ساخت خبر</a>
+                </div>
+            </div>
+        </div>
+        <div class="card p-4 mt-3 ms-auto me-auto row" style="max-width: 800px">
+            <ul class="list-group list-group-flush list-group-numbered">
+                {% for link in object_list %}
+                    <li class="list-group-item"><a href="{{ link.url }}"
+                                                   class="text-decoration-none">{{ link.title }}</a> | <a
+                            href="{% url 'news:comment-create' link.id %}" class="badge bg-warning me-2">کامنت ها</a><a
+                            href="{% url 'news:link-delete' link.id %}" class="badge bg-danger">حذف</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
