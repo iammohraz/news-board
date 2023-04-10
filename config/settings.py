@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "account.apps.AccountConfig",
     "news.apps.NewsConfig",
+    "api.apps.ApiConfig",
 ]
 
 MIDDLEWARE = [
